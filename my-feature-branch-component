@@ -1,0 +1,47 @@
+{% set thumbTM = {
+    mode: 'crop',
+    width: 655,
+    height: 503,
+    quality: 75,
+    position: 'top-center'
+} %}
+
+{% if entry.testimonial|length %}
+	<article class="client-says pt-4">
+		<div class="owl-carousel owlCarouselclient">
+			{% for testimonialEntry in entry.testimonial.all() %}
+				<div class="item">
+				<div class="client-slider" {% if currentSite.handle =='walgate' %} style="background:#A5D1F0;" {% endif %} {% if currentSite.handle =='walgatev2' %} style="background:#A5D1F0;" {% endif %}>
+						{% if testimonialEntry.slideHeading|length %}
+							<h2>{{testimonialEntry.slideHeading}}</h2>
+						{% else %}
+							<h2>What our clients say about us</h2>
+						{% endif %}
+						<div class="item">
+							<div class="client-slide" {% if currentSite.handle =='walgate' %} style="color:#000;" {% endif %} {% if currentSite.handle =='walgatev2' %} style="color:#000;" {% endif %}>
+								{{ testimonialEntry.clientDescription }}
+							</div>
+							<span style="color: white; font-size: 20px; font-weight: 400 ; line-height: 30px; font-family:Century Gothic, sans-serif; font-weight:400; text-align: end; width: 93%; ">{{ testimonialEntry.clientName }}</span>
+						</div>
+					</div>
+				<div class="client-says-banner">
+						{% if testimonialEntry.clientLogo | length %}
+							{% set img = testimonialEntry.clientLogo.one %}
+							<picture>
+								<source media="(-webkit-min-device-pixel-ratio: 1.5)" type="image/webp" srcset="{{ img.getUrl('testimonial2xWebp') }}">
+								<source type="image/webp" srcset="{{ img.getUrl('testimonial1xWebp') }}">
+								<source media="(-webkit-min-device-pixel-ratio: 1.5)" srcset="{{ img.getUrl('testimonial2x') }}">
+								<img loading="lazy" src="{{ img.getUrl('testimonial1x') }}" width="{{ img.getWidth('testimonial1x') }}" height="{{ img.getHeight('testimonial1x') }}" alt="{{ img.title | e }}">
+							</picture>
+						{% else %}
+							<img src="{{ siteUrl }}resources/gallery/dummy-testimonial.png" alt="dummy-testimonial"/>
+						{% endif %}
+					</div>
+					
+					
+
+				</div>
+			{% endfor %}
+		</div>
+	</article>
+{% endif %}
