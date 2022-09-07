@@ -1,0 +1,229 @@
+{% extends "_layouts/_main" %}
+{% block headClass %} h-green-bdr {% endblock %}
+{% block content %}
+
+	<!--Include Banner Start-->
+	{% include '_blocks/heroBanner' with{type:'expertise'} %}
+	<!--Include Banner End-->
+  {% set thumb = {
+    mode: 'crop',
+    width: 85,
+    height: 85,
+    quality: 75,
+    position: 'top-center',
+	format: 'webp'
+} %}
+    
+	{% if craft.app.request.segments %}
+		{#<article class="breadcrumb-link">
+			<div class="container-md container-space">				
+				<a href="{{ siteUrl }}">Home</a>
+				<span>|</span>
+				{% for crumb in entry.getAncestors() %}
+					{{ crumb.getLink() }}<span>|</span>
+				{% endfor %}
+				{{ entry.title }}
+			</div>            
+		</article>#}
+		<ul itemscope itemtype="https://schema.org/BreadcrumbList" id="breadcrumblist" class="breadcrumb-link container-md container-space">
+			<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="{{ siteUrl }}"><span itemprop="name">Home</span></a><span class="bcline">|</span><meta itemprop="position" content="1" /></li>
+             
+             {% set metacontent = 1 %}
+			{% for crumb in entry.getAncestors().all() %}
+		<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a itemprop="item" href="{{ siteUrl }}{{ crumb.uri }}"><span itemprop="name">{{ crumb.title }} </span></a> <span class="bcline">|</span><meta itemprop="position" content="{{ loop.index+1 }}" /></li>
+           {% set metacontent = loop.index+1 %}
+			{% endfor %}
+			<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="current"><span itemprop="name">{{ entry.title }}</span><meta itemprop="position" content="{{ metacontent+1 }}" /></li>			
+		</ul>
+	{% endif %}
+    <article class="expertise-service">
+      <div class="container-md container-space">
+        <div class="row mb-5">
+          <div class="col-sm-12 d-xl-none">
+            <div class="department-head">
+              <div class="owl-carousel owlCarouselDhead">
+
+              {% for departmentHeadEntry in entry.departmentHead.all() %}
+                <div class="item">
+                  <div class="member-post">
+                    <div class="member-flex"> 
+                      {% if departmentHeadEntry.bioImage | length %}
+                        {% set img = departmentHeadEntry.bioImage.one %}
+                        <picture>
+                          <source media="(-webkit-min-device-pixel-ratio: 1.5)" type="image/webp" srcset="{{ img.getUrl('memberThumb2xWebp') }}">
+                          <source type="image/webp" srcset="{{ img.getUrl('memberThumb1xWebp') }}">
+                          <source media="(-webkit-min-device-pixel-ratio: 1.5)" srcset="{{ img.getUrl('memberThumb2x') }}">
+                          <img class="memberThumb" loading="lazy" src="{{ img.getUrl('memberThumb1x') }}" width="{{ img.getWidth('memberThumb1x') }}" height="{{ img.getHeight('memberThumb1x') }}" alt="{{ img.title | e }}">
+                        </picture>
+                      {% endif %}
+                      <div>
+                        <h3><a href="{{ siteUrl }}our-team/{{ departmentHeadEntry.username }}">{{ departmentHeadEntry.name }}</a></h3>
+                        <span>{{ departmentHeadEntry.seniority.label }}</span> 
+                      </div>
+                    </div>
+                    <ul class="member-follow">
+                      {% set departmentHeadEntryblocks = departmentHeadEntry.socialLink.all() %}
+                      {% if departmentHeadEntryblocks|length %}
+                        {% for blockdepartmentHeadEntryblocks in departmentHeadEntryblocks %}
+                          {% if blockdepartmentHeadEntryblocks.socialMedia.value == 'linkedin' %}
+                          <li><a class="member-linkden" href="{{ blockdepartmentHeadEntryblocks.socialLink }}">&nbsp;</a></li>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                      {% if departmentHeadEntry.phone %}    
+                        <li><a class="member-call" href="{{ departmentHeadEntry.phone }}">&nbsp;</a></li>
+                      {% endif %} 
+                      {% if departmentHeadEntry.email %}   
+                        <li><a class="member-msg" href="mailto:{{departmentHeadEntry.email}}?subject={{ 'Fladgate LLP website enquiry - we’re here to help' | url_encode }}&amp;cc=clients@fladgate.com">&nbsp;</a></li>
+                      {% endif  %}  
+                    </ul>
+                  </div>
+                </div>
+              {% endfor %}  
+
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <h2>Our Service</h2>
+          </div>
+          <div class="col-sm-9">
+            <div class="row">
+              <div class="col-md-12 col-xl-8">
+                <div>{{ entry.description }}</div>
+                {% include '_blocks/enquiryForm' %}
+              </div>
+              <div class="col-sm-4 d-none d-xl-flex flex-wrap">
+                <div class="department-head">
+                  <div class="owl-carousel owlCarouselDhead">
+
+                    {% for departmentHeadEntry in entry.departmentHead.all() %}
+                    <div class="item">
+                      <div class="member-post">
+                        <div class="member-flex"> 
+                          {% if departmentHeadEntry.bioImage | length %}
+                            {% set img = departmentHeadEntry.bioImage.one %}
+                            <picture>
+                              <source media="(-webkit-min-device-pixel-ratio: 1.5)" type="image/webp" srcset="{{ img.getUrl('memberThumb2xWebp') }}">
+                              <source type="image/webp" srcset="{{ img.getUrl('memberThumb1xWebp') }}">
+                              <source media="(-webkit-min-device-pixel-ratio: 1.5)" srcset="{{ img.getUrl('memberThumb2x') }}">
+                              <img class="memberThumb" loading="lazy" src="{{ img.getUrl('memberThumb1x') }}" width="{{ img.getWidth('memberThumb1x') }}" height="{{ img.getHeight('memberThumb1x') }}" alt="{{ img.title | e }}">
+                            </picture>
+                          {% endif %}
+                          <div>
+                            <h3><a href="{{ siteUrl }}our-team/{{ departmentHeadEntry.username }}">{{ departmentHeadEntry.name }}</a></h3>
+                            <span>{{ departmentHeadEntry.seniority.label }}</span> </div>
+                          
+                        </div>
+                        <div class="hover-lawer">
+                          <ul class="member-follow">
+                            {% set departmentHeadEntryblocks = departmentHeadEntry.socialLink.all() %}
+                            {% if departmentHeadEntryblocks|length %}
+                              {% for blockdepartmentHeadEntryblocks in departmentHeadEntryblocks %}
+                                {% if blockdepartmentHeadEntryblocks.socialMedia.value == 'linkedin' %}
+                                <li><a class="member-linkden" target="_blank" href="{{ blockdepartmentHeadEntryblocks.socialLink }}">&nbsp;</a></li>
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                            {% if departmentHeadEntry.phone %}    
+                              <li><a class="member-call" href="{{ departmentHeadEntry.phone }}">&nbsp;</a></li>
+                            {% endif %} 
+                            {% if departmentHeadEntry.email %}   
+                              <li><a class="member-msg" href="mailto:{{departmentHeadEntry.email}}?subject={{ 'Fladgate LLP website enquiry - we’re here to help' | url_encode }}&amp;cc=clients@fladgate.com">&nbsp;</a></li>
+                            {% endif  %}  
+                          </ul>
+                          <a class="view-lawyer" href="/our-team/{{departmentHeadEntry.username}}">View Lawyer Bio</a> 
+								        </div>
+                      </div>
+                    </div>
+                    {% endfor %} 
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% set entries = craft.entries({
+            'section' : 'expertise',
+            'descendantOf' : entry.id
+        }) %}
+        {% if entries|length %}
+        <div class="row">
+          <div class="col-sm-3">
+            <h2>Our Expertise</h2>
+          </div>
+          <div class="col-sm-9">
+            <div class="accordion mb-5 Our-Expertise-accordion" id="accordionExample">
+            {% for entryExp in entries.all() %}
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="heading{{ entryExp.id }}">
+
+                 <div style="display:flex; justify-content:end; align-items:center;">      
+                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ entryExp.id }}" aria-expanded="true" aria-controls="collapse{{ entryExp.id }}"> {{ entryExp.title }} </button>
+                   <span  class="minus"></span>
+                 </div>
+                  </h2>
+                  <div id="collapse{{ entryExp.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ entryExp.id }}" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <p>{{ entryExp.previewDescription|striptags|slice(0,300)|default('Read more') }}...</p>
+                      <a class="view-case-studies" href="{{ entryExp.url }}">READ MORE</a> </div>
+                  </div>
+                </div>
+            {% endfor %}
+            </div>
+          </div>
+        </div>
+	  {% else %}
+		{% if entry.level==2 %}
+		 {% set entries = craft.entries({
+            'section' : 'expertise',
+            'siblingOf' : entry.id
+			}) %}
+			 {% if entries|length %}
+				<div class="row">
+				  <div class="col-sm-3">
+					<h2>Our Expertise</h2>
+				  </div>
+				  <div class="col-sm-9">
+					<div class="accordion mb-5 Our-Expertise-accordion" id="accordionExample">
+					{% for entryExp in entries.all() %}
+						<div class="accordion-item">
+						  <h2 class="accordion-header" id="heading{{ entryExp.id }}">
+							<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ entryExp.id }}" aria-expanded="true" aria-controls="collapse{{ entryExp.id }}"> {{ entryExp.title }} </button>
+						  </h2>
+						  <div id="collapse{{ entryExp.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ entryExp.id }}" data-bs-parent="#accordionExample">
+							<div class="accordion-body">
+							  <p>{{ entryExp.previewDescription|striptags|slice(0,300)|default('Read more') }}...</p>
+							  <a class="view-case-studies" href="{{ entryExp.url }}">READ MORE</a> </div>
+						  </div>
+						</div>
+					{% endfor %}
+					</div>
+				  </div>
+				</div>
+			{% endif %}
+		 {% endif %}
+      {% endif %}       
+      </div>
+    </article>
+	
+	{% for block in entry.block.level(1).all() %}
+		{% include "_blocks/"~block.type.handle with { entry:block, pageID:entry.id } %}
+	{% endfor %}
+	
+	{# include insights section #}
+   
+   {% set insightsEntries = craft.entries().section('insights').ourExpertise(entry.id).orderBy('postDate desc').limit(4) %}
+    {% if insightsEntries|length %}
+	    {% include "_blocks/featuredInsights" with { insights: insightsEntries, exploreLink: siteUrl~'our-insights' } %}
+	{% endif %}
+   
+  {# include our people section #} 
+  {% set entriesUser = craft.users().ourExpertise(entry.id).orderBy('RAND()').all() %}  
+  {% if entriesUser|length %}
+  		{% include "_blocks/ourPeople" with { people: entriesUser, exploreLink: siteUrl~'our-team' } %}
+    
+  {% endif %}  
+ 
+{% endblock %}
